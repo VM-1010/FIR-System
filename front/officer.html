@@ -1,0 +1,405 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIR Management System | Officer Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="officer-page">
+    <div class="officer-container">
+      <header class="officer-header card-lite">
+        <div>
+          <h1>Officer Home</h1>
+        </div>
+      </header>
+
+      <section id="homeSection" class="section-block">
+        <div class="stats-grid">
+          <article class="stat-card stat-total">
+            <div class="stat-content">
+              <p class="stat-title">Total FIRs</p>
+              <p class="stat-value" id="statTotalFirs">0</p>
+              <p class="stat-trend"><span aria-hidden="true">↑</span> 12% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">📄</div>
+          </article>
+
+          <article class="stat-card stat-active">
+            <div class="stat-content">
+              <p class="stat-title">Active Cases</p>
+              <p class="stat-value" id="statActiveCases">0</p>
+              <p class="stat-trend"><span aria-hidden="true">↑</span> 8% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">🔥</div>
+          </article>
+
+          <article class="stat-card stat-closed">
+            <div class="stat-content">
+              <p class="stat-title">Cases Closed</p>
+              <p class="stat-value" id="statClosedCases">0</p>
+              <p class="stat-trend"><span aria-hidden="true">↑</span> 5% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">✅</div>
+          </article>
+
+          <article class="stat-card stat-pending">
+            <div class="stat-content">
+              <p class="stat-title">Pending Review</p>
+              <p class="stat-value" id="statPendingCases">0</p>
+              <p class="stat-trend"><span aria-hidden="true">↑</span> 3% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">⏳</div>
+          </article>
+        </div>
+
+        <section class="quick-actions-wrap">
+          <h2>Quick Actions</h2>
+          <div class="actions-grid">
+            <button class="quick-action quick-action-primary" type="button" data-action="register-fir">
+              <span class="quick-icon" aria-hidden="true">📝</span>
+              <span class="quick-text">
+                <strong>New FIR</strong>
+                <small>Register a new FIR record</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="search-fir">
+              <span class="quick-icon" aria-hidden="true">🔎</span>
+              <span class="quick-text">
+                <strong>Search FIR</strong>
+                <small>Find FIR details by FIR ID</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="update-fir">
+              <span class="quick-icon" aria-hidden="true">✏️</span>
+              <span class="quick-text">
+                <strong>Update FIR</strong>
+                <small>Update status or case details</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="register-complainant">
+              <span class="quick-icon" aria-hidden="true">👤</span>
+              <span class="quick-text">
+                <strong>Register Complainant</strong>
+                <small>Add complainant personal details</small>
+              </span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section id="registerFirSection" class="section-block hidden">
+        <article class="panel-card">
+          <header class="panel-header">
+            <h2>Register New FIR</h2>
+            <p class="subtitle-tight">Station: <span id="rfStationName">N/A</span> | Logged in Officer: <span id="rfOfficerName">N/A</span></p>
+          </header>
+          <hr>
+
+          <form id="registerFirForm" novalidate>
+            <section class="form-box system-box">
+              <h3>System Generated Information</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="firId">FIR ID</label>
+                  <input id="firId" name="firId" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="firNumber">FIR Number</label>
+                  <input id="firNumber" name="firNumber" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="officerIdField">Officer ID</label>
+                  <input id="officerIdField" name="officerIdField" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="stationIdField">Station ID</label>
+                  <input id="stationIdField" name="stationIdField" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="dateFiled">Date Filed</label>
+                  <input id="dateFiled" name="dateFiled" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="timeFiled">Time Filed</label>
+                  <input id="timeFiled" name="timeFiled" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="statusField">Status</label>
+                  <input id="statusField" name="statusField" type="text" value="Registered" readonly>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-box">
+              <h3>FIR Case Details</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="placeOccurrence">Place of Occurrence <span class="required">*</span></label>
+                  <input id="placeOccurrence" name="placeOccurrence" type="text" placeholder="Enter location where incident occurred">
+                  <p class="field-error" id="placeOccurrenceError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="complainantId">Complainant ID <span class="required">*</span></label>
+                  <select id="complainantId" name="complainantId">
+                    <option value="">Select Complainant ID</option>
+                  </select>
+                  <p class="field-error" id="complainantIdError"></p>
+                </div>
+                <div class="field-group full-width">
+                  <label for="firDescription">Description <span class="required">*</span></label>
+                  <textarea id="firDescription" name="firDescription" rows="6" placeholder="Enter detailed description of the incident"></textarea>
+                  <div class="helper-row">
+                    <small id="firDescCounter">0 characters</small>
+                  </div>
+                  <p class="field-error" id="firDescriptionError"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Submit FIR</button>
+              <button type="button" id="registerFirResetBtn" class="btn btn-secondary">Reset</button>
+              <button type="button" class="btn btn-ghost js-back-home">Cancel</button>
+            </div>
+            <p class="alert success" id="registerFirSuccess"></p>
+          </form>
+        </article>
+      </section>
+
+      <section id="updateFirSection" class="section-block hidden">
+        <article class="panel-card">
+          <header class="panel-header">
+            <h2>Update FIR Record</h2>
+            <p class="subtitle-tight">Select an FIR and choose the fields you want to update</p>
+          </header>
+          <hr>
+
+          <div class="form-box">
+            <div class="field-group medium">
+              <label for="updateFirId">Select FIR ID <span class="required">*</span></label>
+              <select id="updateFirId">
+                <option value="">Select FIR ID</option>
+              </select>
+              <p class="field-error" id="updateFirIdError"></p>
+            </div>
+          </div>
+
+          <section class="form-box system-box">
+            <h3>FIR Details</h3>
+            <div class="form-grid three-col">
+              <div class="field-group"><label>FIR ID</label><input id="udFirId" type="text" readonly></div>
+              <div class="field-group"><label>FIR Number</label><input id="udFirNumber" type="text" readonly></div>
+              <div class="field-group"><label>Date Filed</label><input id="udDateFiled" type="text" readonly></div>
+              <div class="field-group"><label>Time Filed</label><input id="udTimeFiled" type="text" readonly></div>
+              <div class="field-group"><label>Officer ID</label><input id="udOfficerId" type="text" readonly></div>
+              <div class="field-group"><label>Station ID</label><input id="udStationId" type="text" readonly></div>
+              <div class="field-group"><label>Complainant ID</label><input id="udComplainantId" type="text" readonly></div>
+              <div class="field-group"><label>Current Status</label><input id="udStatus" type="text" readonly></div>
+              <div class="field-group full-width"><label>Place of Occurrence</label><input id="udPlace" type="text" readonly></div>
+              <div class="field-group full-width"><label>Description</label><textarea id="udDescription" rows="5" readonly></textarea></div>
+            </div>
+          </section>
+
+          <section class="form-box">
+            <h3>Select Fields to Update</h3>
+            <div class="form-grid two-col">
+              <div class="field-group full-width check-row">
+                <label><input type="checkbox" id="chkStatus"> Update Status</label>
+                <select id="newStatus" disabled>
+                  <option value="">Select Status</option>
+                  <option value="Under Investigation">Under Investigation</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+                <p class="field-error" id="newStatusError"></p>
+              </div>
+
+              <div class="field-group full-width check-row">
+                <label><input type="checkbox" id="chkPlace"> Update Place of Occurrence</label>
+                <input id="newPlace" type="text" placeholder="Enter updated location" disabled>
+                <p class="field-error" id="newPlaceError"></p>
+              </div>
+
+              <div class="field-group full-width check-row">
+                <label><input type="checkbox" id="chkDescription"> Update Description</label>
+                <textarea id="newDescription" rows="5" placeholder="Enter updated description" disabled></textarea>
+                <p class="field-error" id="newDescriptionError"></p>
+              </div>
+            </div>
+            <p class="field-error" id="updateSelectionError"></p>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" id="updateFirBtn" class="btn btn-primary">Update</button>
+            <button type="button" class="btn btn-secondary js-back-home">Return to Home</button>
+          </div>
+          <p class="alert success" id="updateFirSuccess"></p>
+        </article>
+      </section>
+
+      <section id="searchFirSection" class="section-block hidden">
+        <article class="panel-card">
+          <header class="panel-header">
+            <h2>Search FIR</h2>
+            <p class="subtitle-tight">Find FIR records by FIR ID</p>
+          </header>
+          <hr>
+
+          <section class="form-box">
+            <div class="field-group medium">
+              <label for="searchFirId">Enter FIR ID <span class="required">*</span></label>
+              <div class="inline-actions">
+                <input id="searchFirId" type="text" placeholder="Enter FIR ID (e.g., F01)">
+                <button id="searchFirBtn" type="button" class="btn btn-primary">Search</button>
+                <button id="clearSearchBtn" type="button" class="btn btn-secondary">Clear</button>
+              </div>
+              <p class="field-error" id="searchFirIdError"></p>
+            </div>
+          </section>
+
+          <p class="alert error" id="searchError"></p>
+
+          <section id="searchResultBlock" class="hidden">
+            <section class="form-box system-box">
+              <h3>FIR Details</h3>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>FIR Number</label><input id="sfFirNumber" readonly></div>
+                <div class="field-group"><label>Date Filed</label><input id="sfDateFiled" readonly></div>
+                <div class="field-group"><label>Time Filed</label><input id="sfTimeFiled" readonly></div>
+                <div class="field-group full-width"><label>Place of Occurrence</label><input id="sfPlace" readonly></div>
+                <div class="field-group"><label>Status</label><input id="sfStatus" readonly></div>
+                <div class="field-group full-width"><label>Description</label><textarea id="sfDescription" rows="5" readonly></textarea></div>
+              </div>
+            </section>
+
+            <section class="form-box system-box">
+              <h3>Complainant Details</h3>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>Name</label><input id="sfCompName" readonly></div>
+                <div class="field-group"><label>Age</label><input id="sfCompAge" readonly></div>
+                <div class="field-group"><label>Gender</label><input id="sfCompGender" readonly></div>
+                <div class="field-group full-width"><label>Address</label><textarea id="sfCompAddress" rows="3" readonly></textarea></div>
+                <div class="field-group"><label>Contact Number</label><input id="sfCompContact" readonly></div>
+                <div class="field-group"><label>ID Proof</label><input id="sfCompIdProof" readonly></div>
+              </div>
+            </section>
+
+            <section class="form-box system-box">
+              <h3>Officer Details</h3>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>Officer Name</label><input id="sfOfficerName" readonly></div>
+                <div class="field-group"><label>Rank</label><input id="sfOfficerRank" readonly></div>
+                <div class="field-group"><label>Badge Number</label><input id="sfOfficerBadge" readonly></div>
+                <div class="field-group"><label>Contact Number</label><input id="sfOfficerContact" readonly></div>
+                <div class="field-group"><label>Station ID</label><input id="sfOfficerStation" readonly></div>
+              </div>
+            </section>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost js-back-home">Back</button>
+            <button type="button" id="searchAnotherBtn" class="btn btn-secondary">Search Another</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="registerComplainantSection" class="section-block hidden">
+        <article class="panel-card">
+          <header class="panel-header">
+            <h2>Register New Complainant</h2>
+            <p class="subtitle-tight">Enter complainant personal details</p>
+          </header>
+          <hr>
+
+          <form id="registerComplainantForm" novalidate>
+            <section class="form-box system-box">
+              <div class="field-group">
+                <label for="complainantSystemId">Complainant ID (System Generated)</label>
+                <input id="complainantSystemId" name="complainantSystemId" type="text" readonly>
+              </div>
+            </section>
+
+            <section class="form-box">
+              <h3>Personal Information</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="compName">Name <span class="required">*</span></label>
+                  <input id="compName" type="text" placeholder="Enter full name">
+                  <p class="field-error" id="compNameError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="compAge">Age <span class="required">*</span></label>
+                  <input id="compAge" type="number" min="1" placeholder="Enter age">
+                  <p class="field-error" id="compAgeError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="compGender">Gender <span class="required">*</span></label>
+                  <select id="compGender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <p class="field-error" id="compGenderError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="compContact">Contact Number <span class="required">*</span></label>
+                  <input id="compContact" type="tel" maxlength="10" placeholder="Enter 10-digit mobile number">
+                  <p class="field-error" id="compContactError"></p>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-box">
+              <h3>Contact &amp; Identity</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="compIdProof">ID Proof <span class="required">*</span></label>
+                  <select id="compIdProof">
+                    <option value="">Select ID Proof Type</option>
+                    <option value="Aadhaar">Aadhaar</option>
+                    <option value="PAN Card">PAN Card</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="Voter ID">Voter ID</option>
+                  </select>
+                  <p class="field-error" id="compIdProofError"></p>
+                </div>
+                <div class="field-group full-width">
+                  <label for="compAddress">Address <span class="required">*</span></label>
+                  <textarea id="compAddress" rows="4" placeholder="Enter full residential address"></textarea>
+                  <p class="field-error" id="compAddressError"></p>
+                </div>
+              </div>
+            </section>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="button" id="registerComplainantResetBtn" class="btn btn-secondary">Reset</button>
+              <button type="button" class="btn btn-ghost js-back-home">Cancel</button>
+            </div>
+            <p class="alert success" id="registerComplainantSuccess"></p>
+          </form>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-content">
+      <h3 id="confirmTitle">Confirm Update</h3>
+      <p>Are you sure you want to update the selected fields for this FIR?</p>
+      <div class="form-actions modal-actions">
+        <button id="confirmUpdateBtn" type="button" class="btn btn-primary">Confirm</button>
+        <button id="cancelUpdateBtn" type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/officer.js"></script>
+</body>
+</html>

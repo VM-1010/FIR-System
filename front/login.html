@@ -1,0 +1,34 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIR System | Login</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="page page-login">
+    <section class="card auth-card">
+      <h1>FIR System Login</h1>
+      <p class="subtitle">Enter credentials to continue</p>
+
+      <form id="loginForm" class="form" novalidate>
+        <label for="officerId">Officer ID</label>
+        <input id="officerId" name="officerId" type="text" placeholder="e.g. OFC102" required>
+
+        <label for="stationId">Station ID</label>
+        <input id="stationId" name="stationId" type="text" placeholder="e.g. STN01" required>
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+
+      <p id="loginMsg" class="message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
