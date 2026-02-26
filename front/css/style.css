@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --bg: #f3f6fb;
   --card: #ffffff;
   --text: #12263a;
@@ -444,13 +444,13 @@ hr {
 }
 
 .quick-action-primary {
-  background: #0f3d63;
-  color: #fff;
-  border-color: #0f3d63;
+  background: #ffffff;
+  color: var(--text);
+  border-color: var(--border);
 }
 
 .quick-action-primary .quick-icon {
-  background: rgba(255, 255, 255, 0.22);
+  background: #eef3f8;
 }
 
 .quick-icon {
@@ -548,3 +548,4 @@ hr {
     grid-template-columns: 1fr;
   }
 }
+
