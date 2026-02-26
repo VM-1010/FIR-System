@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIR Management System | Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="admin-page">
+    <div class="admin-container">
+      <header class="admin-header admin-card">
+        <h1>Admin Home</h1>
+      </header>
+
+      <section id="adminHomeSection" class="section-block">
+        <div class="stats-grid">
+          <article class="stat-card stat-total">
+            <div class="stat-content">
+              <p class="stat-title">Total FIRs</p>
+              <p class="stat-value" id="adminStatTotal">0</p>
+              <p class="stat-trend"><span aria-hidden="true">&#8593;</span> 12% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">TF</div>
+          </article>
+
+          <article class="stat-card stat-active">
+            <div class="stat-content">
+              <p class="stat-title">Active Cases</p>
+              <p class="stat-value" id="adminStatActive">0</p>
+              <p class="stat-trend"><span aria-hidden="true">&#8593;</span> 8% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">AC</div>
+          </article>
+
+          <article class="stat-card stat-closed">
+            <div class="stat-content">
+              <p class="stat-title">Cases Closed</p>
+              <p class="stat-value" id="adminStatClosed">0</p>
+              <p class="stat-trend"><span aria-hidden="true">&#8593;</span> 5% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">CC</div>
+          </article>
+
+          <article class="stat-card stat-pending">
+            <div class="stat-content">
+              <p class="stat-title">Pending Review</p>
+              <p class="stat-value" id="adminStatPending">0</p>
+              <p class="stat-trend"><span aria-hidden="true">&#8593;</span> 3% from last month</p>
+            </div>
+            <div class="icon-box" aria-hidden="true">PR</div>
+          </article>
+        </div>
+
+        <section class="quick-actions-wrap">
+          <h2>Quick Actions</h2>
+          <div class="actions-grid">
+            <button class="quick-action" type="button" data-action="add-officer">
+              <span class="quick-icon" aria-hidden="true">AO</span>
+              <span class="quick-text">
+                <strong>Add Officer</strong>
+                <small>Register a new officer at this station</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="remove-officer">
+              <span class="quick-icon" aria-hidden="true">RO</span>
+              <span class="quick-text">
+                <strong>Remove Officer</strong>
+                <small>Delete an officer record after verification</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="view-fir">
+              <span class="quick-icon" aria-hidden="true">VF</span>
+              <span class="quick-text">
+                <strong>View FIR</strong>
+                <small>Search and view FIR details by FIR ID</small>
+              </span>
+            </button>
+
+            <button class="quick-action" type="button" data-action="close-fir">
+              <span class="quick-icon" aria-hidden="true">CF</span>
+              <span class="quick-text">
+                <strong>Close FIR</strong>
+                <small>Mark case as completed after verification</small>
+              </span>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section id="addOfficerSection" class="section-block hidden">
+        <article class="admin-card">
+          <header class="panel-header">
+            <h2>Add New Officer</h2>
+            <p class="subtitle-tight">Station: <span id="addOfficerStationName">N/A</span> | Logged in Admin: <span id="addOfficerAdminName">N/A</span></p>
+          </header>
+          <hr>
+
+          <form id="addOfficerForm" novalidate>
+            <section class="form-box system-box">
+              <h3>System Generated Information</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="addOfficerId">Officer ID</label>
+                  <input id="addOfficerId" type="text" readonly>
+                </div>
+                <div class="field-group">
+                  <label for="addOfficerStationId">Station ID</label>
+                  <input id="addOfficerStationId" type="text" readonly>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-box">
+              <h3>Officer Details</h3>
+              <div class="form-grid two-col">
+                <div class="field-group">
+                  <label for="officerName">Officer Name <span class="required">*</span></label>
+                  <input id="officerName" type="text" placeholder="Enter officer full name">
+                  <p class="field-error" id="officerNameError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="officerRank">Rank <span class="required">*</span></label>
+                  <select id="officerRank">
+                    <option value="">Select Rank</option>
+                    <option value="Constable">Constable</option>
+                    <option value="Head Constable">Head Constable</option>
+                    <option value="Sub Inspector">Sub Inspector</option>
+                    <option value="Inspector">Inspector</option>
+                    <option value="Deputy Superintendent">Deputy Superintendent</option>
+                  </select>
+                  <p class="field-error" id="officerRankError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="officerBadge">Badge Number <span class="required">*</span></label>
+                  <input id="officerBadge" type="text" placeholder="Enter official badge number">
+                  <p class="field-error" id="officerBadgeError"></p>
+                </div>
+                <div class="field-group">
+                  <label for="officerContact">Contact Number <span class="required">*</span></label>
+                  <input id="officerContact" type="tel" maxlength="10" placeholder="Enter 10-digit contact number">
+                  <p class="field-error" id="officerContactError"></p>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-box admin-info-box">
+              <h3>Station Mapping Information</h3>
+              <p>This officer will be assigned to:</p>
+              <p>Station ID: <strong id="mappingStationId">N/A</strong></p>
+              <p>Station Name: <strong id="mappingStationName">N/A</strong></p>
+            </section>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Add Officer</button>
+              <button type="button" id="addOfficerResetBtn" class="btn btn-secondary">Reset</button>
+              <button type="button" class="btn btn-ghost js-back-home">Cancel</button>
+            </div>
+            <p class="alert success" id="addOfficerSuccess"></p>
+          </form>
+        </article>
+      </section>
+
+      <section id="removeOfficerSection" class="section-block hidden">
+        <article class="admin-card">
+          <header class="panel-header">
+            <h2>Remove Officer</h2>
+            <p class="subtitle-tight">Station: <span id="removeOfficerStationName">N/A</span> | Logged in Admin: <span id="removeOfficerAdminName">N/A</span></p>
+          </header>
+          <hr>
+
+          <section class="form-box selection-wrap">
+            <div class="field-group">
+              <label for="removeOfficerId">Officer ID <span class="required">*</span></label>
+              <select id="removeOfficerId">
+                <option value="">Select Officer ID</option>
+              </select>
+              <p class="field-error" id="removeOfficerIdError"></p>
+            </div>
+          </section>
+
+          <section id="removeOfficerDetailsBlock" class="form-box system-box hidden">
+            <h3>Officer Details</h3>
+            <div class="form-grid two-col">
+              <div class="field-group"><label>Officer Name</label><input id="removeOfficerName" readonly></div>
+              <div class="field-group"><label>Rank</label><input id="removeOfficerRank" readonly></div>
+              <div class="field-group"><label>Badge Number</label><input id="removeOfficerBadge" readonly></div>
+              <div class="field-group"><label>Contact Number</label><input id="removeOfficerContact" readonly></div>
+              <div class="field-group full-width"><label>Station ID</label><input id="removeOfficerStationId" readonly></div>
+            </div>
+          </section>
+
+          <section class="form-box admin-warning admin-warning-danger">
+            <p>Warning: This action will permanently remove the officer from the system. This cannot be undone.</p>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" id="deleteOfficerBtn" class="btn btn-danger" disabled>Delete Officer</button>
+            <button type="button" class="btn btn-secondary js-back-home">Cancel</button>
+          </div>
+          <p class="alert success" id="removeOfficerSuccess"></p>
+          <button type="button" id="removeOfficerHomeBtn" class="btn btn-secondary hidden">Return to Home</button>
+        </article>
+      </section>
+
+      <section id="viewFirSection" class="section-block hidden">
+        <article class="admin-card">
+          <header class="panel-header">
+            <h2>View FIR</h2>
+          </header>
+          <hr>
+
+          <section class="form-box selection-wrap">
+            <div class="field-group">
+              <p class="subtitle-tight">Search FIR</p>
+              <label for="viewFirSearchInput">Enter FIR ID <span class="required">*</span></label>
+              <div class="inline-actions">
+                <input id="viewFirSearchInput" type="text" placeholder="Enter FIR ID (e.g., F01)">
+                <button id="viewFirSearchBtn" type="button" class="btn btn-primary">Search</button>
+                <button id="viewFirClearBtn" type="button" class="btn btn-secondary">Clear</button>
+              </div>
+            </div>
+          </section>
+
+          <p class="alert error" id="viewFirError"></p>
+
+          <section id="viewFirResultBlock" class="hidden">
+            <section class="form-box system-box">
+              <h3>FIR Details</h3>
+              <hr>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>FIR Number</label><input id="viewFirNumber" readonly></div>
+                <div class="field-group"><label>Date Filed</label><input id="viewDateFiled" readonly></div>
+                <div class="field-group"><label>Time Filed</label><input id="viewTimeFiled" readonly></div>
+                <div class="field-group full-width"><label>Place of Occurrence</label><input id="viewPlace" readonly></div>
+                <div class="field-group"><label>Status</label><input id="viewStatus" readonly></div>
+                <div class="field-group full-width"><label>Description</label><textarea id="viewDescription" rows="5" readonly></textarea></div>
+              </div>
+            </section>
+
+            <section class="form-box system-box">
+              <h3>Complainant Details</h3>
+              <hr>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>Name</label><input id="viewCompName" readonly></div>
+                <div class="field-group"><label>Age</label><input id="viewCompAge" readonly></div>
+                <div class="field-group"><label>Gender</label><input id="viewCompGender" readonly></div>
+                <div class="field-group full-width"><label>Address</label><textarea id="viewCompAddress" rows="3" readonly></textarea></div>
+                <div class="field-group"><label>Contact Number</label><input id="viewCompContact" readonly></div>
+                <div class="field-group"><label>ID Proof</label><input id="viewCompIdProof" readonly></div>
+              </div>
+            </section>
+
+            <section class="form-box system-box">
+              <h3>Officer Details</h3>
+              <hr>
+              <div class="form-grid three-col">
+                <div class="field-group"><label>Officer Name</label><input id="viewOfficerName" readonly></div>
+                <div class="field-group"><label>Rank</label><input id="viewOfficerRank" readonly></div>
+                <div class="field-group"><label>Badge Number</label><input id="viewOfficerBadge" readonly></div>
+                <div class="field-group"><label>Contact Number</label><input id="viewOfficerContact" readonly></div>
+                <div class="field-group"><label>Station ID</label><input id="viewOfficerStation" readonly></div>
+              </div>
+            </section>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost js-back-home">Back</button>
+            <button type="button" id="viewFirSearchAnotherBtn" class="btn btn-secondary">Search Another</button>
+          </div>
+        </article>
+      </section>
+
+      <section id="closeFirSection" class="section-block hidden">
+        <article class="admin-card">
+          <header class="panel-header">
+            <h2>Close FIR</h2>
+            <p class="subtitle-tight">Station: <span id="closeFirStationName">N/A</span> | Logged in Admin: <span id="closeFirAdminName">N/A</span></p>
+          </header>
+          <hr>
+
+          <section class="form-box selection-wrap">
+            <div class="field-group">
+              <label for="closeFirId">FIR ID <span class="required">*</span></label>
+              <select id="closeFirId">
+                <option value="">Select FIR ID</option>
+              </select>
+              <p class="field-error" id="closeFirIdError"></p>
+            </div>
+          </section>
+
+          <section id="closeFirDetailsBlock" class="form-box system-box hidden">
+            <h3>FIR Details</h3>
+            <div class="form-grid two-col">
+              <div class="field-group"><label>FIR Number</label><input id="closeFirNumber" readonly></div>
+              <div class="field-group"><label>Date Filed</label><input id="closeDateFiled" readonly></div>
+              <div class="field-group full-width"><label>Description</label><textarea id="closeDescription" rows="5" readonly></textarea></div>
+              <div class="field-group"><label>Place of Occurrence</label><input id="closePlace" readonly></div>
+              <div class="field-group"><label>Status</label><input id="closeStatus" readonly></div>
+              <div class="field-group"><label>Complainant Name</label><input id="closeCompName" readonly></div>
+              <div class="field-group"><label>Contact Number</label><input id="closeCompContact" readonly></div>
+            </div>
+            <p class="alert error" id="closeAlreadyMessage"></p>
+          </section>
+
+          <section class="form-box admin-warning admin-warning-caution">
+            <p>Closing this FIR will mark the case as completed. This action can only be reversed by system administrator.</p>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" id="closeFirBtn" class="btn btn-primary" disabled>Close FIR</button>
+            <button type="button" class="btn btn-secondary js-back-home">Cancel</button>
+          </div>
+          <p class="alert success" id="closeFirSuccess"></p>
+          <button type="button" id="closeFirHomeBtn" class="btn btn-secondary hidden">Back to Home</button>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <div id="adminConfirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="adminConfirmTitle">
+    <div class="modal-content">
+      <h3 id="adminConfirmTitle">Confirm Action</h3>
+      <p id="adminConfirmMessage">Are you sure you want to continue?</p>
+      <div class="form-actions modal-actions">
+        <button id="adminConfirmYesBtn" type="button" class="btn btn-primary">Confirm</button>
+        <button id="adminConfirmNoBtn" type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -549,3 +549,93 @@ hr {
   }
 }
 
+/* Admin Panel Styles */
+.admin-page {
+  min-height: 100vh;
+  padding: 22px;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-soft);
+  padding: 20px;
+}
+
+.admin-header {
+  margin-bottom: 18px;
+}
+
+.admin-page .form-box,
+.admin-page .btn,
+.admin-page input,
+.admin-page select,
+.admin-page textarea,
+.admin-page .inline-actions input,
+.admin-page .quick-action,
+.admin-page .quick-icon,
+.admin-page .selection-wrap {
+  border-radius: 4px;
+}
+
+.admin-page .selection-wrap {
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-info-box p {
+  margin: 6px 0;
+}
+
+.admin-warning {
+  border: 1px solid var(--border);
+  padding: 12px;
+}
+
+.admin-warning p {
+  margin: 0;
+}
+
+.admin-warning-danger {
+  background: #fdf2f2;
+  border-color: #f3c7c7;
+  color: #8f1212;
+}
+
+.admin-warning-caution {
+  background: #fff8db;
+  border-color: #e9d69a;
+  color: #5a4a10;
+}
+
+.btn-danger {
+  background: #b42318;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #8f1a12;
+}
+
+#removeOfficerHomeBtn,
+#closeFirHomeBtn {
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    padding: 14px;
+  }
+
+  .admin-page .selection-wrap {
+    max-width: 100%;
+  }
+}
+
