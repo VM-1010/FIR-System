@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remove Officer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="admin-page">
+    <div class="admin-container">
+      <article class="admin-card">
+        <header class="panel-header">
+          <h2>Remove Officer</h2>
+        </header>
+        <hr>
+
+        <form class="form" method="POST" action="{{ url_for('remove_officer') }}">
+          <div class="field-group medium">
+            <label for="officerId">Officer ID</label>
+            <select id="officerId" name="officerId" required>
+              <option value="">Select Officer ID</option>
+              {% for officer in officers %}
+                {% if officer is mapping %}
+                  <option value="{{ officer.get('officer_id', officer.get('id', '')) }}">{{ officer.get('officer_id', officer.get('id', '')) }}</option>
+                {% else %}
+                  <option value="{{ officer[0] }}">{{ officer[0] }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-danger">Remove Officer</button>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+          </div>
+        </form>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

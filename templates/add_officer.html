@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Officer</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="admin-page">
+    <div class="admin-container">
+      <article class="admin-card">
+        <header class="panel-header">
+          <h2>Add New Officer</h2>
+        </header>
+        <hr>
+
+        <form class="form" method="POST" action="{{ url_for('add_officer') }}">
+          <div class="form-grid two-col">
+            <div class="field-group">
+              <label for="name">Officer Name</label>
+              <input id="name" name="name" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="rank">Rank</label>
+              <input id="rank" name="rank" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="badgeNo">Badge Number</label>
+              <input id="badgeNo" name="badgeNo" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="contactNo">Contact Number</label>
+              <input id="contactNo" name="contactNo" type="text" required>
+            </div>
+            <div class="field-group full-width">
+              <label for="role">Role</label>
+              <select id="role" name="role" required>
+                <option value="">Select Role</option>
+                <option value="officer">Officer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Add Officer</button>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+          </div>
+        </form>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

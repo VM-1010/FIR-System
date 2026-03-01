@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update FIR</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="officer-page">
+    <div class="officer-container">
+      <article class="panel-card">
+        <header class="panel-header">
+          <h2>Update FIR</h2>
+        </header>
+        <hr>
+        <form class="form" method="POST" action="{{ url_for('update_fir') }}">
+          <div class="form-grid two-col">
+            <div class="field-group">
+              <label for="firId">FIR ID</label>
+              <select id="firId" name="firId" required>
+                <option value="">Select FIR ID</option>
+                {% for fir_id in firid_list %}
+                  <option value="{{ fir_id }}">{{ fir_id }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="status">Status</label>
+              <input id="status" name="status" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="placeOfOccurrence">Place of Occurrence</label>
+              <input id="placeOfOccurrence" name="placeOfOccurrence" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="complainantId">Complainant ID</label>
+              <input id="complainantId" name="complainantId" type="text" required>
+            </div>
+            <div class="field-group full-width">
+              <label for="description">Description</label>
+              <textarea id="description" name="description" rows="6" required></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update FIR</button>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+          </div>
+        </form>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

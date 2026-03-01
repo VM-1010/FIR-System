@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIR Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="officer-page">
+    <div class="officer-container">
+      <article class="panel-card">
+        <header class="panel-header">
+          <h2>FIR Details</h2>
+        </header>
+        <hr>
+
+        {% if fir %}
+          <section class="form-box system-box">
+            <div class="form-grid two-col">
+              {% for key, value in fir.items() %}
+                <div class="field-group {% if key == 'description' %}full-width{% endif %}">
+                  <label>{{ key|replace('_', ' ')|title }}</label>
+                  {% if key == 'description' %}
+                    <textarea rows="5" readonly>{{ value }}</textarea>
+                  {% else %}
+                    <input type="text" value="{{ value }}" readonly>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+        {% else %}
+          <p class="alert error">FIR not found.</p>
+        {% endif %}
+
+        <div class="form-actions">
+          <a class="btn btn-secondary" href="{{ url_for('home') }}">Back</a>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

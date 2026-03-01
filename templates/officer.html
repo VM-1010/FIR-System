@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -14,6 +14,12 @@
           <h1>Officer Home</h1>
         </div>
       </header>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="alert success">{{ messages[0] }}</p>
+        {% endif %}
+      {% endwith %}
 
       <section id="homeSection" class="section-block">
         <div class="stats-grid">
@@ -57,37 +63,45 @@
         <section class="quick-actions-wrap">
           <h2>Quick Actions</h2>
           <div class="actions-grid">
-            <button class="quick-action quick-action-primary" type="button" data-action="register-fir">
-              <span class="quick-icon" aria-hidden="true">📝</span>
-              <span class="quick-text">
-                <strong>New FIR</strong>
-                <small>Register a new FIR record</small>
-              </span>
-            </button>
+            <form action="{{ url_for('new_fir') }}" method="GET">
+              <button class="quick-action quick-action-primary" type="submit" data-action="register-fir">
+                <span class="quick-icon" aria-hidden="true">📝</span>
+                <span class="quick-text">
+                  <strong>New FIR</strong>
+                  <small>Register a new FIR record</small>
+                </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="search-fir">
-              <span class="quick-icon" aria-hidden="true">🔎</span>
-              <span class="quick-text">
-                <strong>Search FIR</strong>
-                <small>Find FIR details by FIR ID</small>
-              </span>
-            </button>
+            <form action="{{ url_for('search_fir') }}" method="GET">
+              <button class="quick-action" type="submit" data-action="search-fir">
+                <span class="quick-icon" aria-hidden="true">🔎</span>
+                <span class="quick-text">
+                  <strong>Search FIR</strong>
+                  <small>Find FIR details by FIR ID</small>
+                </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="update-fir">
-              <span class="quick-icon" aria-hidden="true">✏️</span>
-              <span class="quick-text">
-                <strong>Update FIR</strong>
-                <small>Update status or case details</small>
-              </span>
-            </button>
+            <form action="{{ url_for('update_fir') }}" method="GET">
+              <button class="quick-action" type="submit" data-action="update-fir">
+                <span class="quick-icon" aria-hidden="true">✏️</span>
+                <span class="quick-text">
+                  <strong>Update FIR</strong>
+                  <small>Update status or case details</small>
+                </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="register-complainant">
-              <span class="quick-icon" aria-hidden="true">👤</span>
-              <span class="quick-text">
-                <strong>Register Complainant</strong>
-                <small>Add complainant personal details</small>
-              </span>
-            </button>
+            <form action="{{ url_for('register_complainant') }}" method="GET">
+              <button class="quick-action" type="submit" data-action="register-complainant">
+                <span class="quick-icon" aria-hidden="true">👤</span>
+                <span class="quick-text">
+                  <strong>Register Complainant</strong>
+                  <small>Add complainant personal details</small>
+                </span>
+              </button>
+            </form>
           </div>
         </section>
       </section>

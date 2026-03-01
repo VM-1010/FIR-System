@@ -3,26 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Close FIR</title>
+  <title>Search FIR</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <main class="admin-page">
-    <div class="admin-container">
-      <article class="admin-card">
+  <main class="officer-page">
+    <div class="officer-container">
+      <article class="panel-card">
         <header class="panel-header">
-          <h2>Close FIR</h2>
+          <h2>Search FIR</h2>
         </header>
         <hr>
-
-        <form class="form" method="POST" action="{{ url_for('close_fir') }}">
+        <form class="form" method="POST" action="{{ url_for('search_fir') }}">
           <div class="field-group medium">
             <label for="firId">FIR ID</label>
             <input id="firId" name="firId" type="text" required>
           </div>
-
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Close FIR</button>
+            <button type="submit" class="btn btn-primary">Search</button>
             <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
           </div>
         </form>

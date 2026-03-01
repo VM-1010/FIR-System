@@ -4,14 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FIR Management System | Admin Panel</title>
-  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
   <main class="admin-page">
     <div class="admin-container">
       <header class="admin-header admin-card">
-        <h1>Admin Home</h1> <form action="/logout"><button type="submit"> Logout </button></form>
+        <h1>Admin Home</h1> <form action="{{ url_for('logout') }}" method="GET"><button type="submit"> Logout </button></form>
       </header>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="alert success">{{ messages[0] }}</p>
+        {% endif %}
+      {% endwith %}
 
       <section id="adminHomeSection" class="section-block">
         <div class="stats-grid">
@@ -62,7 +68,7 @@
         <section class="quick-actions-wrap">
           <h2>Quick Actions</h2>
           <div class="actions-grid">
-            <form action="/add_officer" >
+            <form action="{{ url_for('add_officer') }}" method="GET">
               <button class="quick-action" type="submit" data-action="add-officer">
           <span class="quick-icon" aria-hidden="true">AO</span>
           <span class="quick-text">
@@ -72,7 +78,7 @@
               </button>
             </form>
 
-            <form action="/remove_officer" >
+            <form action="{{ url_for('remove_officer') }}" method="GET">
               <button class="quick-action" type="submit" data-action="remove-officer">
           <span class="quick-icon" aria-hidden="true">RO</span>
           <span class="quick-text">
@@ -82,7 +88,7 @@
               </button>
             </form>
 
-            <form action="/firs" >
+            <form action="{{ url_for('view_fir') }}" method="GET">
               <button class="quick-action" type="submit" data-action="view-fir">
           <span class="quick-icon" aria-hidden="true">VF</span>
           <span class="quick-text">
@@ -92,7 +98,7 @@
               </button>
             </form>
 
-            <form action="/close_fir" >
+            <form action="{{ url_for('close_fir') }}" method="GET">
               <button class="quick-action" type="submit" data-action="close-fir">
           <span class="quick-icon" aria-hidden="true">CF</span>
           <span class="quick-text">

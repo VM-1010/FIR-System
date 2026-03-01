@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Complainant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="officer-page">
+    <div class="officer-container">
+      <article class="panel-card">
+        <header class="panel-header">
+          <h2>Register Complainant</h2>
+        </header>
+        <hr>
+        <form class="form" method="POST" action="{{ url_for('register_complainant') }}">
+          <div class="form-grid two-col">
+            <div class="field-group">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="age">Age</label>
+              <input id="age" name="age" type="number" min="1" required>
+            </div>
+            <div class="field-group">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="contactNo">Contact Number</label>
+              <input id="contactNo" name="contactNo" type="text" required>
+            </div>
+            <div class="field-group">
+              <label for="idProof">ID Proof</label>
+              <input id="idProof" name="idProof" type="text" required>
+            </div>
+            <div class="field-group full-width">
+              <label for="address">Address</label>
+              <textarea id="address" name="address" rows="4" required></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Register</button>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+          </div>
+        </form>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>View FIRs</title>
+  <title>View Officers</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -11,29 +11,31 @@
     <div class="admin-container">
       <article class="admin-card">
         <header class="panel-header">
-          <h2>All FIRs</h2>
+          <h2>Station Officers</h2>
         </header>
         <hr>
-
-        {% if firs %}
+        {% if officers %}
           <section class="form-box system-box">
             <div class="form-grid">
-              {% for fir in firs %}
+              {% for officer in officers %}
                 <article class="card-lite">
-                  {% for key, value in fir.items() %}
-                    <p><strong>{{ key|replace('_', ' ')|title }}:</strong> {{ value }}</p>
-                  {% endfor %}
-                  {% if fir.get('id') %}
-                    <p><a href="{{ url_for('view_fir_details', fir_id=fir.get('id')) }}">View Details</a></p>
+                  {% if officer is mapping %}
+                    {% for key, value in officer.items() %}
+                      <p><strong>{{ key|replace('_', ' ')|title }}:</strong> {{ value }}</p>
+                    {% endfor %}
+                  {% else %}
+                    <p><strong>Officer ID:</strong> {{ officer[0] }}</p>
+                    {% if officer|length > 1 %}
+                      <p><strong>Station ID:</strong> {{ officer[1] }}</p>
+                    {% endif %}
                   {% endif %}
                 </article>
               {% endfor %}
             </div>
           </section>
         {% else %}
-          <p class="alert error">No FIR records found.</p>
+          <p class="alert error">No officers found.</p>
         {% endif %}
-
         <div class="form-actions">
           <a class="btn btn-secondary" href="{{ url_for('home') }}">Back</a>
         </div>

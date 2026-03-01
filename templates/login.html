@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -12,7 +12,13 @@
       <h1>FIR System Login</h1>
       <p class="subtitle">Enter credentials to continue</p>
 
-      <form id="loginForm" class="form" novalidate method="post" action="/login">
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <p class="message" aria-live="polite">{{ messages[0] }}</p>
+        {% endif %}
+      {% endwith %}
+
+      <form id="loginForm" class="form" novalidate method="POST" action="{{ url_for('login') }}">
         <label for="officerId">Officer ID</label>
         <input id="officerId" name="officerId" type="text" placeholder="e.g. OFC102" required>
 
@@ -28,7 +34,5 @@
       <p id="loginMsg" class="message" aria-live="polite"></p>
     </section>
   </main>
-
-  
 </body>
 </html>
