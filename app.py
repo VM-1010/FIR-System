@@ -180,4 +180,6 @@ def view_fir_details(fir_id):
     fir = backend.get_fir_by_id(fir_id)
     return render_template('fir_details.html', fir=fir)
 
-app.run(debug=True, host='0.0.0.0', port=5000)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
