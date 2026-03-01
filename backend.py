@@ -1,3 +1,53 @@
+'''
+INTERACTIONS BETWEEN app.py (Flask) AND backend.py
+==================================================
+
+This document summarizes how the Flask application (app.py) interacts with the backend logic (backend.py):
+
+1. Authentication & Session Management
+-------------------------------------
+- `validate_officer_tuple(officerid, stationid, password)`
+    Called during login to check officer credentials.
+- `get_role(officerid, stationid)`
+    Fetches the role (admin/officer) for session management.
+
+2. Officer Management
+---------------------
+- `add_officer(officerdata)`
+    Called by admin to add a new officer. Receives a dict with officer details.
+- `remove_officer(officerid, stationid)`
+    Removes an officer from the system.
+- `get_officers(stationid)`
+    Returns a list of officers for a given station (for admin views).
+
+3. FIR Management
+-----------------
+- `create_fir(fir_data)`
+    Registers a new FIR. Receives a dict with FIR details.
+- `get_all_firs(stationId=None)`
+    Returns all FIRs (optionally filtered by station).
+- `get_fir_by_id(fir_id)`
+    Returns details for a specific FIR.
+- `update_fir(fir_id, fir_data)`
+    Updates an existing FIR with new data.
+- `set_fir_status(fir_id, status)`
+    Changes the status of a FIR (e.g., closed).
+
+4. Complainant Management
+------------------------
+- `add_complainant(complainant_data)`
+    Registers a new complainant. Receives a dict with complainant details.
+- `get_complainant_by_id(complainant_id)`
+    Returns details for a specific complainant.
+
+5. Profile & Miscellaneous
+--------------------------
+- `get_officer_by_id(officerid, stationid)`
+    Returns officer profile details for the profile page.
+
+All data passed from app.py to backend.py is either a primitive (id, status) or a dictionary (for creation/update). All data returned to app.py is a dictionary or list of dictionaries, suitable for Jinja2 rendering in templates.
+'''
+
 from werkzeug.security import generate_password_hash, check_password_hash
 # use this when querying : cursor = conn.cursor(dictionary=True), the query should return listof dictionaries instead of tuples, so we can access values by column names instead of index
 
@@ -29,7 +79,7 @@ def get_officers(stationid):
     # return list of officers for a station
     return [('officer1', 'station1'), ('officer2', 'station1')]
 
-def get_all_firs(stationId=None):
+def get_all_firs(stationId):
     # return list of all FIRs for a station or all FIRs if stationId is None
     return [
         {

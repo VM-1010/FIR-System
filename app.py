@@ -84,14 +84,16 @@ def remove_officer():
 def view_officers():
     if session.get('role') != 'admin':
         abort(403)
-    officers = backend.get_all_officers()   
+    stationId = session.get('stationId')
+    officers = backend.get_officers(stationId)   
     return render_template('view_officers.html', officers=officers)
 
 @app.route('/firs')
 def view_fir():
     if session.get('role') != 'admin':
         abort(403)
-    firs = backend.get_all_firs()
+    stationId = session.get('stationId')
+    firs = backend.get_all_firs(stationId)
     return render_template('view_firs.html', firs=firs)
 
 @app.route('/close_fir', methods=['POST', 'GET'])
@@ -131,7 +133,7 @@ def search_fir():
 @app.route('/update_fir', methods=['POST', 'GET'])
 def update_fir():
     if request.method == 'GET':
-        firs = backend.get_all_fir()
+        firs = [i.get('fir_id') for i in backend.get_all_fir()]
         return render_template('update_fir.html', firid_list=firs)
     fir_id = request.form.get('firId')
     fir_data = {
