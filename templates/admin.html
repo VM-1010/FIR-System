@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FIR Management System | Admin Panel</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
   <main class="admin-page">
     <div class="admin-container">
       <header class="admin-header admin-card">
-        <h1>Admin Home</h1>
+        <h1>Admin Home</h1> <form action="/logout"><button type="submit"> Logout </button></form>
       </header>
 
       <section id="adminHomeSection" class="section-block">
@@ -56,40 +56,51 @@
           </article>
         </div>
 
+
+        
+
         <section class="quick-actions-wrap">
           <h2>Quick Actions</h2>
           <div class="actions-grid">
-            <button class="quick-action" type="button" data-action="add-officer">
-              <span class="quick-icon" aria-hidden="true">AO</span>
-              <span class="quick-text">
-                <strong>Add Officer</strong>
-                <small>Register a new officer at this station</small>
-              </span>
-            </button>
+            <form action="/add_officer" >
+              <button class="quick-action" type="submit" data-action="add-officer">
+          <span class="quick-icon" aria-hidden="true">AO</span>
+          <span class="quick-text">
+            <strong>Add Officer</strong>
+            <small>Register a new officer at this station</small>
+          </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="remove-officer">
-              <span class="quick-icon" aria-hidden="true">RO</span>
-              <span class="quick-text">
-                <strong>Remove Officer</strong>
-                <small>Delete an officer record after verification</small>
-              </span>
-            </button>
+            <form action="/remove_officer" >
+              <button class="quick-action" type="submit" data-action="remove-officer">
+          <span class="quick-icon" aria-hidden="true">RO</span>
+          <span class="quick-text">
+            <strong>Remove Officer</strong>
+            <small>Delete an officer record after verification</small>
+          </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="view-fir">
-              <span class="quick-icon" aria-hidden="true">VF</span>
-              <span class="quick-text">
-                <strong>View FIR</strong>
-                <small>Search and view FIR details by FIR ID</small>
-              </span>
-            </button>
+            <form action="/firs" >
+              <button class="quick-action" type="submit" data-action="view-fir">
+          <span class="quick-icon" aria-hidden="true">VF</span>
+          <span class="quick-text">
+            <strong>View FIR</strong>
+            <small>Search and view FIR details by FIR ID</small>
+          </span>
+              </button>
+            </form>
 
-            <button class="quick-action" type="button" data-action="close-fir">
-              <span class="quick-icon" aria-hidden="true">CF</span>
-              <span class="quick-text">
-                <strong>Close FIR</strong>
-                <small>Mark case as completed after verification</small>
-              </span>
-            </button>
+            <form action="/close_fir" >
+              <button class="quick-action" type="submit" data-action="close-fir">
+          <span class="quick-icon" aria-hidden="true">CF</span>
+          <span class="quick-text">
+            <strong>Close FIR</strong>
+            <small>Mark case as completed after verification</small>
+          </span>
+              </button>
+            </form>
           </div>
         </section>
       </section>
@@ -335,6 +346,6 @@
     </div>
   </div>
 
-  <script src="js/admin.js"></script>
+  
 </body>
 </html>
