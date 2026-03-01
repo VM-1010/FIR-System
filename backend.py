@@ -9,6 +9,8 @@ def get_role(officerid, stationid) -> str:
     # return role from database table for the composite key
     return 'admin' if officerid == 'admin' else 'officer'
 
+# generate officer_id by fetching the last officer_id for a station from database table and incrementing it by 1, format should be OFF001, OFF002 etc
+
 def add_officer(officerdata):
     # add officer to database table
     pass
@@ -16,6 +18,8 @@ def add_officer(officerdata):
 def remove_officer(officerid, stationid):
     # remove officer from database table
     pass
+
+# generate fir_id by fetching the last fir_id from database table and incrementing it by 1, format should be FIR001, FIR002 etc
 
 def create_fir(fir_data):
     # add FIR to database table
@@ -42,6 +46,8 @@ def get_all_firs(stationId=None):
         }
     ]
     
+
+#generate complainant_id by fetching the last complainant_id from database table and incrementing it by 1, format should be COMP001, COMP002 etc
 
 def add_complainant(complainant_data):
     # add complainant to database table
@@ -77,3 +83,5 @@ def get_officer_by_id(officer_id):
 def get_profile_details(officer_id):
     # return profile details (officer data, and station data, + some statistics) as a dict for a given officer ID
     return None
+
+# add more functions as needed
