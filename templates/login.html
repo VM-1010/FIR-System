@@ -18,20 +18,18 @@
         {% endif %}
       {% endwith %}
 
-      <form id="loginForm" class="form" novalidate method="POST" action="{{ url_for('login') }}">
-        <label for="officerId">Officer ID</label>
-        <input id="officerId" name="officerId" type="text" placeholder="e.g. OFC102" required>
+      <form class="form" method="POST" action="{{ url_for('login') }}">
+        <label for="officer_id">Officer ID</label>
+        <input id="officer_id" name="officer_id" type="text" placeholder="Enter officer ID" required>
 
-        <label for="stationId">Station ID</label>
-        <input id="stationId" name="stationId" type="text" placeholder="e.g. STN01" required>
+        <label for="station_id">Station ID</label>
+        <input id="station_id" name="station_id" type="text" placeholder="Enter station ID" required>
 
         <label for="password">Password</label>
         <input id="password" name="password" type="password" placeholder="Enter password" required>
 
         <button type="submit" class="btn btn-primary">Login</button>
       </form>
-
-      <p id="loginMsg" class="message" aria-live="polite"></p>
     </section>
   </main>
 </body>

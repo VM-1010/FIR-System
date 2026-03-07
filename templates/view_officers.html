@@ -14,6 +14,7 @@
           <h2>Station Officers</h2>
         </header>
         <hr>
+
         {% if officers %}
           <section class="form-box system-box">
             <div class="form-grid">
@@ -36,6 +37,7 @@
         {% else %}
           <p class="alert error">No officers found.</p>
         {% endif %}
+
         <div class="form-actions">
           <a class="btn btn-secondary" href="{{ url_for('home') }}">Back</a>
         </div>

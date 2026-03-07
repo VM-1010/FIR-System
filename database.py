@@ -32,7 +32,7 @@ def _schema_script() -> str:
     );
 
     CREATE TABLE IF NOT EXISTS police_station (
-        station_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        station_id TEXT PRIMARY KEY,
         station_name TEXT NOT NULL,
         address TEXT,
         city TEXT,
@@ -42,18 +42,19 @@ def _schema_script() -> str:
     );
 
     CREATE TABLE IF NOT EXISTS officer (
-        officer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        rank TEXT,
-        badge_no TEXT UNIQUE,
-        station_id INTEGER,
+        officer_id TEXT PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        rank TEXT NOT NULL,
+        badge_no TEXT UNIQUE NOT NULL,
+        station_id TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'officer' CHECK (role IN ('admin', 'officer')),
         FOREIGN KEY (user_id) REFERENCES user(user_id),
         FOREIGN KEY (station_id) REFERENCES police_station(station_id)
     );
 
     CREATE TABLE IF NOT EXISTS complainant (
-        complainant_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
+        complainant_id TEXT PRIMARY KEY,
+        user_id INTEGER NOT NULL,
         age INTEGER,
         gender TEXT,
         id_proof TEXT,
@@ -61,37 +62,27 @@ def _schema_script() -> str:
     );
 
     CREATE TABLE IF NOT EXISTS fir (
-        fir_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        fir_no TEXT UNIQUE,
-        date_filed TEXT,
-        time_filed TEXT,
-        place_of_occurrence TEXT,
-        description TEXT,
-        status TEXT DEFAULT 'Registered' CHECK (
+        fir_id TEXT PRIMARY KEY,
+        fir_no TEXT UNIQUE NOT NULL,
+        date_filed TEXT NOT NULL,
+        time_filed TEXT NOT NULL,
+        place_of_occurrence TEXT NOT NULL,
+        description TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'Registered' CHECK (
             status IN ('Registered', 'Under Investigation', 'Pending Review', 'Rejected', 'Closed')
         ),
-        complainant_id INTEGER,
-        officer_id INTEGER,
-        station_id INTEGER,
+        complainant_id TEXT NOT NULL,
+        officer_id TEXT NOT NULL,
+        station_id TEXT NOT NULL,
         FOREIGN KEY (complainant_id) REFERENCES complainant(complainant_id),
         FOREIGN KEY (officer_id) REFERENCES officer(officer_id),
         FOREIGN KEY (station_id) REFERENCES police_station(station_id)
     );
 
-    CREATE TABLE IF NOT EXISTS investigation (
-        investigation_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        fir_id INTEGER,
-        start_date TEXT,
-        end_date TEXT,
-        investigation_status TEXT,
-        remarks TEXT,
-        FOREIGN KEY (fir_id) REFERENCES fir(fir_id)
-    );
-
     CREATE TABLE IF NOT EXISTS pass (
-        officer_id INTEGER,
-        station_id INTEGER,
-        password TEXT,
+        officer_id TEXT NOT NULL,
+        station_id TEXT NOT NULL,
+        password TEXT NOT NULL,
         PRIMARY KEY (officer_id, station_id),
         FOREIGN KEY (officer_id) REFERENCES officer(officer_id),
         FOREIGN KEY (station_id) REFERENCES police_station(station_id)
@@ -107,20 +98,20 @@ def _seed_data(conn: sqlite3.Connection) -> None:
 
     conn.executemany(
         """
-        INSERT INTO police_station (station_name, address, city, district, state, contact_no)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO police_station (station_id, station_name, address, city, district, state, contact_no)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
         [
-            ("Central Police Station", "MG Road", "Kochi", "Ernakulam", "Kerala", "9876500001"),
-            ("North Station", "North Street", "Kochi", "Ernakulam", "Kerala", "9876500002"),
-            ("South Station", "South Avenue", "Kochi", "Ernakulam", "Kerala", "9876500003"),
-            ("East Station", "East End", "Thrissur", "Thrissur", "Kerala", "9876500004"),
-            ("West Station", "West Market", "Calicut", "Kozhikode", "Kerala", "9876500005"),
-            ("Hill Station", "Hill Road", "Idukki", "Idukki", "Kerala", "9876500006"),
-            ("City Crime Branch", "City Center", "Kochi", "Ernakulam", "Kerala", "9876500007"),
-            ("Traffic Station", "Main Junction", "Kochi", "Ernakulam", "Kerala", "9876500008"),
-            ("Cyber Cell", "Tech Park", "Trivandrum", "Trivandrum", "Kerala", "9876500009"),
-            ("Rural Station", "Village Road", "Alappuzha", "Alappuzha", "Kerala", "9876500010"),
+            ("ST01", "Central Police Station", "MG Road", "Kochi", "Ernakulam", "Kerala", "9876500001"),
+            ("ST02", "North Station", "North Street", "Kochi", "Ernakulam", "Kerala", "9876500002"),
+            ("ST03", "South Station", "South Avenue", "Kochi", "Ernakulam", "Kerala", "9876500003"),
+            ("ST04", "East Station", "East End", "Thrissur", "Thrissur", "Kerala", "9876500004"),
+            ("ST05", "West Station", "West Market", "Calicut", "Kozhikode", "Kerala", "9876500005"),
+            ("ST06", "Hill Station", "Hill Road", "Idukki", "Idukki", "Kerala", "9876500006"),
+            ("ST07", "City Crime Branch", "City Center", "Kochi", "Ernakulam", "Kerala", "9876500007"),
+            ("ST08", "Traffic Station", "Main Junction", "Kochi", "Ernakulam", "Kerala", "9876500008"),
+            ("ST09", "Cyber Cell", "Tech Park", "Trivandrum", "Trivandrum", "Kerala", "9876500009"),
+            ("ST10", "Rural Station", "Village Road", "Alappuzha", "Alappuzha", "Kerala", "9876500010"),
         ],
     )
 
@@ -141,89 +132,70 @@ def _seed_data(conn: sqlite3.Connection) -> None:
     )
 
     conn.executemany(
-        "INSERT INTO officer (user_id, rank, badge_no, station_id) VALUES (?, ?, ?, ?)",
+        "INSERT INTO officer (officer_id, user_id, rank, badge_no, station_id, role) VALUES (?, ?, ?, ?, ?, ?)",
         [
-            (1, "Inspector", "INSP1001", 1),
-            (2, "Sub Inspector", "SI2002", 1),
-            (3, "Head Constable", "HC3003", 2),
-            (4, "Inspector", "INSP1004", 3),
-            (5, "Sub Inspector", "SI2005", 4),
-            (6, "Inspector", "INSP1006", 5),
-            (7, "Sub Inspector", "SI2007", 6),
-            (8, "Head Constable", "HC3008", 7),
-            (9, "Inspector", "INSP1009", 8),
-            (10, "Sub Inspector", "SI2010", 9),
+            ("OF01", 1, "Inspector", "INSP1001", "ST01", "admin"),
+            ("OF02", 2, "Sub Inspector", "SI2002", "ST01", "officer"),
+            ("OF03", 3, "Head Constable", "HC3003", "ST02", "officer"),
+            ("OF04", 4, "Inspector", "INSP1004", "ST03", "officer"),
+            ("OF05", 5, "Sub Inspector", "SI2005", "ST04", "officer"),
+            ("OF06", 6, "Inspector", "INSP1006", "ST05", "officer"),
+            ("OF07", 7, "Sub Inspector", "SI2007", "ST06", "officer"),
+            ("OF08", 8, "Head Constable", "HC3008", "ST07", "officer"),
+            ("OF09", 9, "Inspector", "INSP1009", "ST08", "officer"),
+            ("OF10", 10, "Sub Inspector", "SI2010", "ST09", "officer"),
         ],
     )
 
     conn.executemany(
-        "INSERT INTO complainant (user_id, age, gender, id_proof) VALUES (?, ?, ?, ?)",
+        "INSERT INTO complainant (complainant_id, user_id, age, gender, id_proof) VALUES (?, ?, ?, ?, ?)",
         [
-            (1, 34, "Male", "Aadhaar"),
-            (2, 29, "Female", "PAN"),
-            (3, 42, "Male", "Voter ID"),
-            (4, 31, "Male", "Driving License"),
-            (5, 27, "Female", "Aadhaar"),
-            (6, 38, "Male", "PAN"),
-            (7, 25, "Female", "Aadhaar"),
-            (8, 45, "Male", "Passport"),
-            (9, 30, "Female", "Voter ID"),
-            (10, 50, "Male", "Driving License"),
+            ("C01", 1, 34, "Male", "Aadhaar"),
+            ("C02", 2, 29, "Female", "PAN"),
+            ("C03", 3, 42, "Male", "Voter ID"),
+            ("C04", 4, 31, "Male", "Driving License"),
+            ("C05", 5, 27, "Female", "Aadhaar"),
+            ("C06", 6, 38, "Male", "PAN"),
+            ("C07", 7, 25, "Female", "Aadhaar"),
+            ("C08", 8, 45, "Male", "Passport"),
+            ("C09", 9, 30, "Female", "Voter ID"),
+            ("C10", 10, 50, "Male", "Driving License"),
         ],
     )
 
     conn.executemany(
         """
         INSERT INTO fir
-        (fir_no, date_filed, time_filed, place_of_occurrence, description, status, complainant_id, officer_id, station_id)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (fir_id, fir_no, date_filed, time_filed, place_of_occurrence, description, status, complainant_id, officer_id, station_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         [
-            ("FIR001", "2026-03-01", "10:00:00", "MG Road", "Theft complaint", "Registered", 1, 1, 1),
-            ("FIR002", "2026-03-02", "11:00:00", "North Street", "Accident case", "Under Investigation", 2, 2, 1),
-            ("FIR003", "2026-03-03", "12:00:00", "South Avenue", "Robbery", "Pending Review", 3, 3, 2),
-            ("FIR004", "2026-03-04", "13:00:00", "East End", "Cyber fraud", "Registered", 4, 4, 3),
-            ("FIR005", "2026-03-05", "14:00:00", "West Market", "Vehicle theft", "Closed", 5, 5, 4),
-            ("FIR006", "2026-03-06", "15:00:00", "Hill Road", "Missing person", "Registered", 6, 6, 5),
-            ("FIR007", "2026-03-07", "16:00:00", "City Center", "Assault case", "Under Investigation", 7, 7, 6),
-            ("FIR008", "2026-03-08", "17:00:00", "Main Junction", "Traffic violation", "Registered", 8, 8, 7),
-            ("FIR009", "2026-03-09", "18:00:00", "Tech Park", "Online scam", "Pending Review", 9, 9, 8),
-            ("FIR010", "2026-03-10", "19:00:00", "Village Road", "Property dispute", "Registered", 10, 10, 9),
-        ],
-    )
-
-    conn.executemany(
-        """
-        INSERT INTO investigation (fir_id, start_date, end_date, investigation_status, remarks)
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        [
-            (1, "2026-03-02", None, "Ongoing", "Evidence collection"),
-            (2, "2026-03-03", None, "Ongoing", "Witness statements"),
-            (3, "2026-03-04", None, "Pending", "Under review"),
-            (4, "2026-03-05", None, "Ongoing", "Cyber analysis"),
-            (5, "2026-03-06", "2026-03-15", "Completed", "Case closed"),
-            (6, "2026-03-07", None, "Ongoing", "Search operation"),
-            (7, "2026-03-08", None, "Ongoing", "Medical report awaited"),
-            (8, "2026-03-09", None, "Ongoing", "Traffic CCTV review"),
-            (9, "2026-03-10", None, "Pending", "Bank details check"),
-            (10, "2026-03-11", None, "Ongoing", "Legal consultation"),
+            ("F01", "FIR001", "2026-03-01", "10:00:00", "MG Road", "Theft complaint", "Registered", "C01", "OF01", "ST01"),
+            ("F02", "FIR002", "2026-03-02", "11:00:00", "North Street", "Accident case", "Under Investigation", "C02", "OF02", "ST01"),
+            ("F03", "FIR003", "2026-03-03", "12:00:00", "South Avenue", "Robbery", "Pending Review", "C03", "OF03", "ST02"),
+            ("F04", "FIR004", "2026-03-04", "13:00:00", "East End", "Cyber fraud", "Registered", "C04", "OF04", "ST03"),
+            ("F05", "FIR005", "2026-03-05", "14:00:00", "West Market", "Vehicle theft", "Closed", "C05", "OF05", "ST04"),
+            ("F06", "FIR006", "2026-03-06", "15:00:00", "Hill Road", "Missing person", "Registered", "C06", "OF06", "ST05"),
+            ("F07", "FIR007", "2026-03-07", "16:00:00", "City Center", "Assault case", "Under Investigation", "C07", "OF07", "ST06"),
+            ("F08", "FIR008", "2026-03-08", "17:00:00", "Main Junction", "Traffic violation", "Registered", "C08", "OF08", "ST07"),
+            ("F09", "FIR009", "2026-03-09", "18:00:00", "Tech Park", "Online scam", "Pending Review", "C09", "OF09", "ST08"),
+            ("F10", "FIR010", "2026-03-10", "19:00:00", "Village Road", "Property dispute", "Registered", "C10", "OF10", "ST09"),
         ],
     )
 
     conn.executemany(
         "INSERT INTO pass (officer_id, station_id, password) VALUES (?, ?, ?)",
         [
-            (1, 1, "pass1"),
-            (2, 1, "pass2"),
-            (3, 2, "pass3"),
-            (4, 3, "pass4"),
-            (5, 4, "pass5"),
-            (6, 5, "pass6"),
-            (7, 6, "pass7"),
-            (8, 7, "pass8"),
-            (9, 8, "pass9"),
-            (10, 9, "pass10"),
+            ("OF01", "ST01", "pass1"),
+            ("OF02", "ST01", "pass2"),
+            ("OF03", "ST02", "pass3"),
+            ("OF04", "ST03", "pass4"),
+            ("OF05", "ST04", "pass5"),
+            ("OF06", "ST05", "pass6"),
+            ("OF07", "ST06", "pass7"),
+            ("OF08", "ST07", "pass8"),
+            ("OF09", "ST08", "pass9"),
+            ("OF10", "ST09", "pass10"),
         ],
     )
 

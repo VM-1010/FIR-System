@@ -11,7 +11,7 @@
     <div class="admin-container">
       <article class="admin-card">
         <header class="panel-header">
-          <h2>All FIRs</h2>
+          <h2>FIR Records</h2>
         </header>
         <hr>
 
@@ -20,11 +20,18 @@
             <div class="form-grid">
               {% for fir in firs %}
                 <article class="card-lite">
-                  {% for key, value in fir.items() %}
-                    <p><strong>{{ key|replace('_', ' ')|title }}:</strong> {{ value }}</p>
-                  {% endfor %}
-                  {% if fir.get('id') %}
-                    <p><a href="{{ url_for('view_fir_details', fir_id=fir.get('id')) }}">View Details</a></p>
+                  {% if fir is mapping %}
+                    <p><strong>FIR ID:</strong> {{ fir.get('fir_id', fir.get('id', 'N/A')) }}</p>
+                    <p><strong>FIR No:</strong> {{ fir.get('fir_no', fir.get('title', 'N/A')) }}</p>
+                    <p><strong>Status:</strong> {{ fir.get('status', 'N/A') }}</p>
+                    <p><strong>Date Filed:</strong> {{ fir.get('date_filed', fir.get('date', 'N/A')) }}</p>
+                    {% set route_fir_id = fir.get('fir_id', fir.get('id')) %}
+                  {% else %}
+                    <p><strong>FIR ID:</strong> {{ fir[0] if fir|length > 0 else 'N/A' }}</p>
+                    {% set route_fir_id = fir[0] if fir|length > 0 else None %}
+                  {% endif %}
+                  {% if route_fir_id %}
+                    <p><a class="link" href="{{ url_for('view_fir_details', fir_id=route_fir_id) }}">View Details</a></p>
                   {% endif %}
                 </article>
               {% endfor %}

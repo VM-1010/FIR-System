@@ -12,26 +12,57 @@
       <article class="admin-card">
         <header class="panel-header">
           <h2>Remove Officer</h2>
+          <p class="subtitle-tight">Station ID: {{ session.get('stationId', 'N/A') }} | Logged in Admin: {{ session.get('officerId', 'N/A') }}</p>
         </header>
         <hr>
 
         <form class="form" method="POST" action="{{ url_for('remove_officer') }}">
-          <div class="field-group medium">
-            <label for="officerId">Officer ID</label>
-            <select id="officerId" name="officerId" required>
-              <option value="">Select Officer ID</option>
-              {% for officer in officers %}
-                {% if officer is mapping %}
-                  <option value="{{ officer.get('officer_id', officer.get('id', '')) }}">{{ officer.get('officer_id', officer.get('id', '')) }}</option>
-                {% else %}
-                  <option value="{{ officer[0] }}">{{ officer[0] }}</option>
-                {% endif %}
-              {% endfor %}
-            </select>
-          </div>
+          <section class="form-box selection-wrap">
+            <div class="field-group">
+              <label for="officer_id">Officer ID <span class="required">*</span></label>
+              <select id="officer_id" name="officer_id" required>
+                <option value="">Select Officer ID</option>
+                {% for officer in officers %}
+                  {% if officer is mapping %}
+                    <option value="{{ officer.get('officer_id', officer.get('id', '')) }}">{{ officer.get('officer_id', officer.get('id', '')) }}</option>
+                  {% else %}
+                    <option value="{{ officer[0] }}">{{ officer[0] }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </section>
+
+          <section class="form-box system-box">
+            <h3>Officer Details (Verification List)</h3>
+            {% if officers %}
+              <div class="form-grid">
+                {% for officer in officers %}
+                  <article class="card-lite">
+                    {% if officer is mapping %}
+                      {% for key, value in officer.items() %}
+                        <p><strong>{{ key|replace('_', ' ')|title }}:</strong> {{ value }}</p>
+                      {% endfor %}
+                    {% else %}
+                      <p><strong>Officer ID:</strong> {{ officer[0] }}</p>
+                      {% if officer|length > 1 %}
+                        <p><strong>Station ID:</strong> {{ officer[1] }}</p>
+                      {% endif %}
+                    {% endif %}
+                  </article>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p class="alert error">No officer records found.</p>
+            {% endif %}
+          </section>
+
+          <section class="form-box admin-warning admin-warning-danger">
+            <p>Warning: This action will permanently remove the officer from the system and cannot be undone.</p>
+          </section>
 
           <div class="form-actions">
-            <button type="submit" class="btn btn-danger">Remove Officer</button>
+            <button type="submit" class="btn btn-danger">Delete Officer</button>
             <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
           </div>
         </form>

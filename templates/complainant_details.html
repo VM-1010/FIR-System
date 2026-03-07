@@ -17,13 +17,35 @@
 
         {% if complainant %}
           <section class="form-box system-box">
-            <div class="form-grid two-col">
-              {% for key, value in complainant.items() %}
-                <div class="field-group">
-                  <label>{{ key|replace('_', ' ')|title }}</label>
-                  <input type="text" value="{{ value }}" readonly>
-                </div>
-              {% endfor %}
+            <div class="form-grid three-col">
+              <div class="field-group">
+                <label>Complainant ID</label>
+                <input type="text" value="{{ complainant.get('complainant_id', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Name</label>
+                <input type="text" value="{{ complainant.get('name', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Contact Number</label>
+                <input type="text" value="{{ complainant.get('contact_no', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Age</label>
+                <input type="text" value="{{ complainant.get('age', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Gender</label>
+                <input type="text" value="{{ complainant.get('gender', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>ID Proof</label>
+                <input type="text" value="{{ complainant.get('id_proof', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group full-width">
+                <label>Address</label>
+                <textarea rows="4" readonly>{{ complainant.get('address', '') }}</textarea>
+              </div>
             </div>
           </section>
         {% else %}

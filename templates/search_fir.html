@@ -14,14 +14,29 @@
           <h2>Search FIR</h2>
         </header>
         <hr>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <p class="alert error">{{ messages[0] }}</p>
+          {% endif %}
+        {% endwith %}
+
         <form class="form" method="POST" action="{{ url_for('search_fir') }}">
-          <div class="field-group medium">
-            <label for="firId">FIR ID</label>
-            <input id="firId" name="firId" type="text" required>
-          </div>
+          <section class="form-box selection-wrap">
+            <div class="field-group medium">
+              <label for="fir_id">Select FIR ID <span class="required">*</span></label>
+              <select id="fir_id" name="fir_id" required>
+                <option value="">Select FIR ID</option>
+                {% for fir_id in fir_ids or [] %}
+                  <option value="{{ fir_id }}">{{ fir_id }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </section>
+
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Search</button>
-            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Back</a>
           </div>
         </form>
       </article>

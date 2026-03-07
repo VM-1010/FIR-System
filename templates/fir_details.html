@@ -17,21 +17,58 @@
 
         {% if fir %}
           <section class="form-box system-box">
-            <div class="form-grid two-col">
-              {% for key, value in fir.items() %}
-                <div class="field-group {% if key == 'description' %}full-width{% endif %}">
-                  <label>{{ key|replace('_', ' ')|title }}</label>
-                  {% if key == 'description' %}
-                    <textarea rows="5" readonly>{{ value }}</textarea>
-                  {% else %}
-                    <input type="text" value="{{ value }}" readonly>
-                  {% endif %}
-                </div>
-              {% endfor %}
+            <h3>FIR Information</h3>
+            <div class="form-grid three-col">
+              <div class="field-group">
+                <label>FIR ID</label>
+                <input type="text" value="{{ fir.get('fir_id', fir.get('id', 'N/A')) }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>FIR No</label>
+                <input type="text" value="{{ fir.get('fir_no', fir.get('title', 'N/A')) }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Status</label>
+                <input type="text" value="{{ fir.get('status', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Date Filed</label>
+                <input type="text" value="{{ fir.get('date_filed', fir.get('date', 'N/A')) }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Time Filed</label>
+                <input type="text" value="{{ fir.get('time_filed', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Place of Occurrence</label>
+                <input type="text" value="{{ fir.get('place_of_occurrence', fir.get('location', 'N/A')) }}" readonly>
+              </div>
+              <div class="field-group full-width">
+                <label>Description</label>
+                <textarea rows="5" readonly>{{ fir.get('description', '') }}</textarea>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-box system-box">
+            <h3>Complainant and Assignment</h3>
+            <div class="form-grid three-col">
+              <div class="field-group">
+                <label>Complainant ID</label>
+                <input type="text" value="{{ fir.get('complainant_id', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Officer ID</label>
+                <input type="text" value="{{ fir.get('officer_id', 'N/A') }}" readonly>
+              </div>
+              <div class="field-group">
+                <label>Station ID</label>
+                <input type="text" value="{{ fir.get('station_id', 'N/A') }}" readonly>
+              </div>
             </div>
           </section>
         {% else %}
-          <p class="alert error">FIR not found.</p>
+          <p class="alert error">No FIR found with this ID.</p>
         {% endif %}
 
         <div class="form-actions">

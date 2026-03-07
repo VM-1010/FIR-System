@@ -49,15 +49,30 @@ All data passed from app.py to backend.py is either a primitive (id, status) or 
 '''
 
 from werkzeug.security import generate_password_hash, check_password_hash
+import database
 # use this when querying : cursor = conn.cursor(dictionary=True), the query should return listof dictionaries instead of tuples, so we can access values by column names instead of index
 
-def validate_officer_tuple(officerid, stationid, password):
-    # validate officer tuple from database table, password is hashed with werkzeug.security
-    return True
+def validate_officer_tuple(officer_id, station_id, password):
+    row = database.fetch_one(
+        """
+        SELECT *
+        FROM pass
+        WHERE officer_id=? AND station_id=? AND password=?
+        """,
+        (officer_id, station_id, password)
+    )
+    return row is not None
 
-def get_role(officerid, stationid) -> str:
-    # return role from database table for the composite key
-    return 'admin' if officerid == 'admin' else 'officer'
+def get_role(officer_id, station_id):
+    row = database.fetch_one(
+        """
+        SELECT role
+        FROM officer
+        WHERE officer_id=? AND station_id=?
+        """,
+        (officer_id, station_id)
+    )
+    return row["role"] if row else "officer"
 
 # generate officer_id by fetching the last officer_id for a station from database table and incrementing it by 1, format should be OFF001, OFF002 etc
 
@@ -81,20 +96,25 @@ def get_officers(stationid):
 
 def get_all_firs(stationId):
     # return list of all FIRs for a station or all FIRs if stationId is None
-    return [
-        {
-            'id': 'FIR001',
-            'title': 'Theft Case',
-            'status': 'open',
-            'date': '2024-01-15'
-        },
-        {
-            'id': 'FIR002',
-            'title': 'Assault Incident',
-            'status': 'closed',
-            'date': '2024-01-16'
-        }
-    ]
+    if stationId:
+        return database.fetch_all(
+            """
+            SELECT fir_id, fir_no, date_filed, time_filed, place_of_occurrence, description, status,
+                   complainant_id, officer_id, station_id
+            FROM fir
+            WHERE station_id = ?
+            ORDER BY date_filed DESC, time_filed DESC
+            """,
+            (stationId,),
+        )
+    return database.fetch_all(
+        """
+        SELECT fir_id, fir_no, date_filed, time_filed, place_of_occurrence, description, status,
+               complainant_id, officer_id, station_id
+        FROM fir
+        ORDER BY date_filed DESC, time_filed DESC
+        """
+    )
     
 
 #generate complainant_id by fetching the last complainant_id from database table and incrementing it by 1, format should be COMP001, COMP002 etc
@@ -113,13 +133,42 @@ def set_fir_status(fir_id, status):
 
 def get_fir_by_id(fir_id):
     # return FIR details for a given FIR ID
-    return {
-        'id': fir_id,
-        'title': 'Sample FIR',
-        'description': 'This is a sample FIR description.',
-        'status': 'open',
-        'date': '2024-01-15'
-    }
+    return database.fetch_one(
+        """
+        SELECT fir_id, fir_no, date_filed, time_filed, place_of_occurrence, description, status,
+               complainant_id, officer_id, station_id
+        FROM fir
+        WHERE fir_id = ? OR fir_no = ?
+        """,
+        (fir_id, fir_id),
+    )
+
+
+def get_total_firs():
+    row = database.fetch_one("SELECT COUNT(*) AS total FROM fir")
+    return int(row["total"]) if row else 0
+
+
+def get_active_firs():
+    row = database.fetch_one(
+        """
+        SELECT COUNT(*) AS total
+        FROM fir
+        WHERE status = 'Under Investigation'
+        """
+    )
+    return int(row["total"]) if row else 0
+
+
+def get_recent_firs():
+    return database.fetch_all(
+        """
+        SELECT fir_no, place_of_occurrence, status
+        FROM fir
+        ORDER BY date_filed DESC
+        LIMIT 5
+        """
+    )
     
 def get_complainant_by_id(complainant_id):
     # return complainant details for a given complainant ID

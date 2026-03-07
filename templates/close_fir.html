@@ -12,14 +12,29 @@
       <article class="admin-card">
         <header class="panel-header">
           <h2>Close FIR</h2>
+          <p class="subtitle-tight">Station ID: {{ session.get('stationId', 'N/A') }} | Logged in Admin: {{ session.get('officerId', 'N/A') }}</p>
         </header>
         <hr>
 
         <form class="form" method="POST" action="{{ url_for('close_fir') }}">
-          <div class="field-group medium">
-            <label for="firId">FIR ID</label>
-            <input id="firId" name="firId" type="text" required>
-          </div>
+          <section class="form-box selection-wrap">
+            <div class="field-group">
+              <label for="fir_id">FIR ID <span class="required">*</span></label>
+              <select id="fir_id" name="fir_id" required>
+                <option value="">Select FIR ID</option>
+                {% for fir in firs or [] %}
+                  {% set candidate = fir.get('fir_id', fir.get('id')) if fir is mapping else fir %}
+                  {% if candidate %}
+                    <option value="{{ candidate }}">{{ candidate }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </section>
+
+          <section class="form-box admin-warning admin-warning-caution">
+            <p>Closing this FIR will mark the case as completed. This action can only be reversed by system administrator.</p>
+          </section>
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">Close FIR</button>

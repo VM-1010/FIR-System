@@ -11,40 +11,56 @@
     <div class="officer-container">
       <article class="panel-card">
         <header class="panel-header">
-          <h2>Update FIR</h2>
+          <h2>Update FIR Record</h2>
+          <p class="subtitle-tight">Select an FIR and update status or case details</p>
         </header>
         <hr>
+
         <form class="form" method="POST" action="{{ url_for('update_fir') }}">
-          <div class="form-grid two-col">
-            <div class="field-group">
-              <label for="firId">FIR ID</label>
-              <select id="firId" name="firId" required>
+          <section class="form-box">
+            <div class="field-group medium">
+              <label for="fir_id">Select FIR ID <span class="required">*</span></label>
+              <select id="fir_id" name="fir_id" required>
                 <option value="">Select FIR ID</option>
                 {% for fir_id in firid_list %}
-                  <option value="{{ fir_id }}">{{ fir_id }}</option>
+                  {% if fir_id %}
+                    <option value="{{ fir_id }}">{{ fir_id }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
             </div>
-            <div class="field-group">
-              <label for="status">Status</label>
-              <input id="status" name="status" type="text" required>
+          </section>
+
+          <section class="form-box">
+            <h3>Select Fields to Update</h3>
+            <div class="form-grid two-col">
+              <div class="field-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                  <option value="">No change</option>
+                  <option value="Under Investigation">Under Investigation</option>
+                  <option value="Pending Review">Pending Review</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="place_of_occurrence">Place of Occurrence</label>
+                <input id="place_of_occurrence" name="place_of_occurrence" type="text" placeholder="Leave empty to keep unchanged">
+              </div>
+              <div class="field-group">
+                <label for="complainant_id">Complainant ID</label>
+                <input id="complainant_id" name="complainant_id" type="number" min="1" placeholder="Leave empty to keep unchanged">
+              </div>
+              <div class="field-group full-width">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="6" placeholder="Leave empty to keep unchanged"></textarea>
+              </div>
             </div>
-            <div class="field-group">
-              <label for="placeOfOccurrence">Place of Occurrence</label>
-              <input id="placeOfOccurrence" name="placeOfOccurrence" type="text" required>
-            </div>
-            <div class="field-group">
-              <label for="complainantId">Complainant ID</label>
-              <input id="complainantId" name="complainantId" type="text" required>
-            </div>
-            <div class="field-group full-width">
-              <label for="description">Description</label>
-              <textarea id="description" name="description" rows="6" required></textarea>
-            </div>
-          </div>
+          </section>
+
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Update FIR</button>
-            <a class="btn btn-secondary" href="{{ url_for('home') }}">Cancel</a>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a class="btn btn-secondary" href="{{ url_for('home') }}">Return to Home</a>
           </div>
         </form>
       </article>
