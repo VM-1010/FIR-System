@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, session, flash
 import backend
+from datetime import datetime
 
 app = Flask(__name__)  
 app.secret_key = 'rockey'
@@ -46,13 +47,41 @@ def _get_complainant_ids():
     firs = backend.get_all_firs(session.get('stationId'))
     return _extract_id_list(firs, ['complainant_id'])
 
+def _get_next_fir_preview():
+    firs = backend.get_all_firs(None) or []
+    max_num = 0
+    for row in firs:
+        raw = str(row.get('fir_no') or row.get('fir_id') or '')
+        digits = ''.join(ch for ch in raw if ch.isdigit())
+        if digits:
+            max_num = max(max_num, int(digits))
+    next_num = max_num + 1
+    now = datetime.now()
+    return {
+        "fir_no": f"FIR{next_num:03d}",
+        "date_filed": now.strftime("%Y-%m-%d"),
+        "time_filed": now.strftime("%H:%M:%S"),
+        "status": "Registered",
+    }
+
+
+def _get_dashboard_stats(station_id=None):
+    firs = backend.get_all_firs(station_id) or []
+    return {
+        "total": len(firs),
+        "active": sum(1 for f in firs if f.get("status") == "Under Investigation"),
+        "closed": sum(1 for f in firs if f.get("status") == "Closed"),
+        "pending": sum(1 for f in firs if f.get("status") == "Pending Review"),
+    }
+
 @app.route('/')
 def home():
     if not session.get('officerId'):
         return redirect(url_for('login'))
+    stats = _get_dashboard_stats(session.get('stationId'))
     if session.get('role') == 'admin':
-        return render_template("admin.html")
-    return render_template("officer.html")
+        return render_template("admin.html", stats=stats)
+    return render_template("officer.html", stats=stats)
     
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -72,11 +101,12 @@ def login():
         session['officerId'] = oId
         session['stationId'] = sId
         session['role'] = backend.get_role(oId, sId)
+        stats = _get_dashboard_stats(sId)
 
         if session['role'] == 'admin':
-            return render_template("admin.html")
+            return render_template("admin.html", stats=stats)
 
-        return render_template("officer.html")
+        return render_template("officer.html", stats=stats)
 
     return render_template("login.html")
 
@@ -159,7 +189,8 @@ def new_fir():
         abort(403)
     if request.method == 'GET':
         complainant_ids = _get_complainant_ids()
-        return render_template('new_fir.html', complainant_ids=complainant_ids)
+        preview = _get_next_fir_preview()
+        return render_template('new_fir.html', complainant_ids=complainant_ids, preview=preview)
     place = request.form.get('place_of_occurrence') or request.form.get('location')
     fir_data = {
         'officer_id': session.get('officerId'),
