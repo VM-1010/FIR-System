@@ -131,6 +131,7 @@ def add_officer():
         'rank': request.form.get('rank'),
         'badge_no': request.form.get('badge_no') or request.form.get('badgeNo'),
         'contact_no': request.form.get('contact_no') or request.form.get('contactNo'),
+        'password': request.form.get('password'),
         'station_id': session.get('stationId'),
         'role': request.form.get('role', 'officer')
     }

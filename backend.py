@@ -80,55 +80,68 @@ def get_role(officer_id, station_id):
 
 def add_officer(officerdata):
     try:
-        # 1) Create user row
-        user_id = database.execute(
-            """
-            INSERT INTO user (name, contact_no, address)
-            VALUES (?, ?, ?)
-            """,
-            (
-                officerdata.get("name"),
-                officerdata.get("contact_no"),
-                officerdata.get("address"),
-            ),
-        )
+        conn = database.get_connection()
+        cursor = conn.cursor()
+        try:
+            # 1) Create user row
+            cursor.execute(
+                """
+                INSERT INTO user (name, contact_no, address)
+                VALUES (?, ?, ?)
+                """,
+                (
+                    officerdata.get("name"),
+                    officerdata.get("contact_no"),
+                    officerdata.get("address"),
+                ),
+            )
+            user_id = cursor.lastrowid
 
-        # 2) Generate next officer_id in OF001 format
-        rows = database.fetch_all("SELECT officer_id FROM officer")
-        max_num = 0
-        for row in rows:
-            oid = str(row.get("officer_id", ""))
-            m = re.search(r"(\d+)$", oid)
-            if m:
-                max_num = max(max_num, int(m.group(1)))
-        next_num = max_num + 1
-        officer_id = f"OF{next_num:03d}"
+            # 2) Generate next officer_id in OF001 format
+            rows = cursor.execute("SELECT officer_id FROM officer").fetchall()
+            max_num = 0
+            for row in rows:
+                oid = str(row["officer_id"] if "officer_id" in row.keys() else "")
+                m = re.search(r"(\d+)$", oid)
+                if m:
+                    max_num = max(max_num, int(m.group(1)))
+            next_num = max_num + 1
+            officer_id = f"OF{next_num:03d}"
 
-        # 3) Insert officer
-        database.execute(
-            """
-            INSERT INTO officer (officer_id, user_id, rank, badge_no, station_id, role)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """,
-            (
-                officer_id,
-                user_id,
-                officerdata.get("rank"),
-                officerdata.get("badge_no"),
-                officerdata.get("station_id"),
-                officerdata.get("role", "officer"),
-            ),
-        )
+            # 3) Insert officer
+            cursor.execute(
+                """
+                INSERT INTO officer (officer_id, user_id, rank, badge_no, station_id, role)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    officer_id,
+                    user_id,
+                    officerdata.get("rank"),
+                    officerdata.get("badge_no"),
+                    officerdata.get("station_id"),
+                    officerdata.get("role", "officer"),
+                ),
+            )
 
-        # 4) Insert plain password in pass table (temporary)
-        plain_password = officerdata.get("password") or f"pass{next_num}"
-        database.execute(
-            """
-            INSERT INTO pass (officer_id, station_id, password)
-            VALUES (?, ?, ?)
-            """,
-            (officer_id, officerdata.get("station_id"), plain_password),
-        )
+            # 4) Insert password in pass table
+            cursor.execute(
+                """
+                INSERT INTO pass (officer_id, station_id, password)
+                VALUES (?, ?, ?)
+                """,
+                (
+                    officer_id,
+                    officerdata.get("station_id"),
+                    officerdata.get("password"),
+                ),
+            )
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            conn.close()
         return True
     except Exception:
         return False
