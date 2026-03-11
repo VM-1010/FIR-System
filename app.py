@@ -108,7 +108,7 @@ def login():
 
         return render_template("officer.html", stats=stats)
 
-    return render_template("login.html")
+    return render_template("login.html", error="Invalid credentials. Please try again.")
 
 
 @app.route('/logout')

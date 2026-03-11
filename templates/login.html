@@ -18,6 +18,12 @@
         {% endif %}
       {% endwith %}
 
+      {% if error %}
+        <div style="color:red; text-align:center; margin-bottom:10px;">
+            {{ error }}
+        </div>
+      {% endif %}
+
       <form class="form" method="POST" action="{{ url_for('login') }}">
         <label for="officer_id">Officer ID</label>
         <input id="officer_id" name="officer_id" type="text" placeholder="Enter officer ID" required>
